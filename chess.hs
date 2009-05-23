@@ -1,11 +1,10 @@
 module Chess where
 
-data Move = Left | Right | Up | Down
+data Move = Left | Right | Up | Down deriving (Eq)
 type Position = (Char, Int)
 
-executeMove :: Position -> Move -> Position
-executeMove p m 
-            | m == Chess.Left = ((fst p) + 1, snd p)
-            | m == Chess.Right = ((fst p) - 1, snd p)
-            | m == Chess.Up = (fst p, (snd p) + 1)
-            | m == Chess.Down = (fst p, (snd p) - 1)
+executeMove position move 
+    | move == Chess.Left = ((fst position) + 1, snd position)
+    | move == Chess.Right = ((fst position) - 1, snd position)
+    | move == Chess.Up = (fst position, (snd position) + 1)
+    | move == Chess.Down = (fst position, (snd position) - 1)
