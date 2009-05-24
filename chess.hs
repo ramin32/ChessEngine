@@ -1,10 +1,19 @@
-module Chess where
+module Chess
+( Position
+, Piece
+, Color
+, ChessPiece
+) where
 
-data Move = Left | Right | Up | Down deriving (Eq)
+-- Position File, Rank
 type Position = (Char, Int)
 
-executeMove position move 
-    | move == Chess.Left = ((fst position) + 1, snd position)
-    | move == Chess.Right = ((fst position) - 1, snd position)
-    | move == Chess.Up = (fst position, (snd position) + 1)
-    | move == Chess.Down = (fst position, (snd position) - 1)
+data Piece = Pawn | Knight | Bishop | Rook | Queen | King deriving (Eq, Ord, Show, Read) 
+
+data Color = White | Black deriving (Eq, Show, Read)
+
+type ChessPiece = (Piece, Color, Position) 
+
+
+ 
+
