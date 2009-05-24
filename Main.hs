@@ -1,3 +1,3 @@
 import Chess
 
-main = do putStrLn $ show newGame
+main = do putStrLn $ show newGameSetup
