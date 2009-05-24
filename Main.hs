@@ -1,3 +1,3 @@
 import Chess
 
-main = do putStrLn "Heuuuyoo!"
+main = do putStrLn $ show newGame
