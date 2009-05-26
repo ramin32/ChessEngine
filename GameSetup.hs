@@ -50,13 +50,16 @@ surround :: String -> String -> String
 surround s1 s2 = s1 ++ s2 ++ s1
 fullIntercalate str list = surround str $ intercalate str list
 
-stringifySetup setup = intercalate "\n" [fullIntercalate "|" $ map (\x -> pieceAt x setup) (positionsByRank r) | r <- [8, 7..1]]
+stringifySetup setup = intercalate "\n" 
+                       [(show r) ++ " " ++ (fullIntercalate "|" $ map (\x -> pieceAt x setup) (positionsByRank r) )
+                       | r <- [8, 7..1]]
 
 printSetup :: GameSetup -> IO ()
 printSetup setup = do
-                       putStrLn $ surround "+" $ replicate 23 '-'
-                       putStrLn $ stringifySetup setup 
-                       putStrLn $ surround "+" $ replicate 23 '-'
+    putStrLn $ "--" ++ (surround "+" $ replicate 23 '-')
+    putStrLn $ stringifySetup setup 
+    putStrLn $ "--" ++ (surround "+" $ replicate 23 '-')
+    putStrLn "  |A |B |C |D |E |F |G |H |" 
 
 onBoard :: Position -> Bool
 onBoard p 
