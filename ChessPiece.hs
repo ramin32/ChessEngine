@@ -1,4 +1,4 @@
-module Chess where
+module ChessPiece where
 
 data PieceName = Pawn | Knight | Bishop | Rook | Queen | King deriving (Eq, Ord, Show, Enum) 
 
