@@ -1,3 +1,7 @@
 import GameSetup
 
-main = do putStrLn $ show newGameSetup
+main = do 
+          let setup = newGameSetup
+          printSetup setup
+          return ()
+           
