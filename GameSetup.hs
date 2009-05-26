@@ -2,12 +2,19 @@ module GameSetup where
 
 import qualified Data.Map as Map
 import Data.List
+import Data.Char
 
 import ChessPiece
 
 data Position = Position {file :: Char, rank :: Int} deriving (Eq, Ord, Show)
-
 type GameSetup = Map.Map Position ChessPiece
+
+fileOrd :: Position -> Int
+fileOrd p = ord $ file p
+
+
+difference :: Position -> Position -> (Int, Int)
+difference p1 p2 = (abs $ (fileOrd p1) - (fileOrd p2), abs $ (rank p1) - (rank p2))
 
 createGameSetup :: [(Position, ChessPiece)] -> GameSetup
 createGameSetup list = Map.fromList list 
@@ -33,8 +40,6 @@ newGameSetup = Map.union
                (Map.union (pawnsSetup White) (otherPiecesSetup White))
                (Map.union (pawnsSetup Black) (otherPiecesSetup Black))
 
-
-
 cleanMaybe :: (Show a) => Maybe a -> String
 cleanMaybe Nothing = "  "
 cleanMaybe (Just a) = show a
@@ -52,3 +57,18 @@ printSetup setup = do
                        putStrLn $ surround "+" $ replicate 23 '-'
                        putStrLn $ stringifySetup setup 
                        putStrLn $ surround "+" $ replicate 23 '-'
+
+onBoard :: Position -> Bool
+onBoard p 
+    | file p < 'a' || file p > 'h' = False
+    | rank p < 1 || rank p > 8 = False
+    | otherwise = True
+
+
+clearPath :: Position -> Position -> GameSetup -> Bool
+clearPath p1 p2 setup
+    | p1 == p2 = False
+    | not (onBoard p1 || onBoard p2) = False
+    | otherwise = Nothing == Map.lookup p2 setup
+    where diff = difference p1 p2 
+

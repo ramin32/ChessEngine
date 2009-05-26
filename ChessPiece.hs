@@ -9,5 +9,5 @@ data ChessPiece = ChessPiece {name :: PieceName, color :: Color} deriving (Eq)
 instance Show ChessPiece where
     show p = ([head $ show $ color p]) ++ initial
         where 
-            initial = [if (name p) == Knight then 'N' else (head $ show $ name p)]
+        initial = [if (name p) == Knight then 'N' else (head $ show $ name p)]
 
