@@ -16,28 +16,21 @@ createGameSetup list = Map.fromList list
 positionsByRank :: Int -> [Position]
 positionsByRank rank = zip ['a'..'h'] (cycle [rank]) 
 
-pawns :: Color -> Int -> GameSetup
-pawns color rank  = createGameSetup 
-                    [(position, ChessPiece Pawn color) | position <- positionsByRank rank]
+pawnsSetup :: Color -> GameSetup
+pawnsSetup color = createGameSetup $ 
+                         zip (positionsByRank rank) (cycle [ChessPiece Pawn color]) 
+                         where 
+                            rank = if color == White then 2 else 7
 
-whitePawnRank = 2
-blackPawnRank = 7
-whitePawns = pawns White whitePawnRank
-blackPawns = pawns Black blackPawnRank
-
-otherPieces :: Color -> Int -> GameSetup
-otherPieces color rank = createGameSetup [(p ,ChessPiece n c)
-                         | (n, c, p) <- zip3 [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook] 
-                                             (cycle [color]) 
-                                             (positionsByRank rank)]
-
-whiteOthersRank = 1
-blackOthersRank = 8
-whiteOtherPieces = otherPieces White whiteOthersRank
-blackOtherPieces = otherPieces Black blackOthersRank
-
+otherPiecesSetup :: Color -> GameSetup
+otherPiecesSetup color = createGameSetup $
+                         [(p, ChessPiece n c) | (p, n, c) <- zip3 (positionsByRank rank) pieces (cycle [color])]
+                         where 
+                            pieces = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook] 
+                            rank = if color == White then 1 else 8
+            
 newGameSetup :: GameSetup
 newGameSetup = Map.union 
-               (Map.union whitePawns whiteOtherPieces)
-               (Map.union blackPawns blackOtherPieces)
+               (Map.union (pawnsSetup White) (otherPiecesSetup White))
+               (Map.union (pawnsSetup Black) (otherPiecesSetup Black))
 
