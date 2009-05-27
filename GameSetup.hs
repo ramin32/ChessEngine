@@ -2,76 +2,60 @@ module GameSetup where
 
 import qualified Data.Map as Map
 import Data.List
-import Data.Char
 
 import ChessPiece
+import Position
+import StringUtil
 
-data Position = Position {file :: Char, rank :: Int} deriving (Eq, Ord, Show)
-type GameSetup = Map.Map Position ChessPiece
+type PartialSetup = Map.Map Position ChessPiece
 
-fileOrd :: Position -> Int
-fileOrd p = ord $ file p
+data GameSetup = GameSetup { whitePieces :: PartialSetup,
+                             blackPieces :: PartialSetup } deriving (Eq, Ord)   
 
 
-difference :: Position -> Position -> (Int, Int)
-difference p1 p2 = (abs $ (fileOrd p1) - (fileOrd p2), abs $ (rank p1) - (rank p2))
 
-createGameSetup :: [(Position, ChessPiece)] -> GameSetup
-createGameSetup list = Map.fromList list 
-
-positionsByRank :: Int -> [Position]
-positionsByRank rank = [Position f r | (f, r) <- zip ['a'..'h'] (repeat rank) ]
-
-pawnsSetup :: Color -> GameSetup
-pawnsSetup color = createGameSetup $ 
+pawnsSetup :: Color -> PartialSetup
+pawnsSetup color = Map.fromList $ 
                          zip (positionsByRank rank) (repeat $ ChessPiece Pawn color) 
                          where 
                             rank = if color == White then 2 else 7
 
-otherPiecesSetup :: Color -> GameSetup
-otherPiecesSetup color = createGameSetup $
+otherPiecesSetup :: Color -> PartialSetup
+otherPiecesSetup color = Map.fromList $
                          [(p, ChessPiece n c) | (p, n, c) <- zip3 (positionsByRank rank) pieces (repeat color)]
                          where 
                             pieces = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook] 
                             rank = if color == White then 1 else 8
             
 newGameSetup :: GameSetup
-newGameSetup = Map.union 
+newGameSetup = GameSetup 
                (Map.union (pawnsSetup White) (otherPiecesSetup White))
                (Map.union (pawnsSetup Black) (otherPiecesSetup Black))
 
-cleanMaybe :: (Show a) => Maybe a -> String
-cleanMaybe Nothing = "  "
-cleanMaybe (Just a) = show a
+singleView :: GameSetup -> PartialSetup
+singleView setup = Map.union (whitePieces setup) (blackPieces setup)
 
-pieceAt x setup = cleanMaybe $ Map.lookup x setup
+piecesByRank :: GameSetup -> Int -> [Maybe ChessPiece]
+piecesByRank setup r = map (\p -> Map.lookup p (singleView setup)) (positionsByRank r)
 
-surround :: String -> String -> String
-surround s1 s2 = s1 ++ s2 ++ s1
-fullIntercalate str list = surround str $ intercalate str list
+instance Show GameSetup where
+    show setup = intercalate "\n" ((surround header (stringifySetup setup)) ++ fileLegend)
 
-stringifySetup setup = intercalate "\n" 
-                       [(show r) ++ " " ++ (fullIntercalate "|" $ map (\x -> pieceAt x setup) (positionsByRank r) )
-                       | r <- [8, 7..1]]
+stringifySetup :: GameSetup -> [String]
+stringifySetup setup = concat [prettyRank setup r | r <- [8, 7..1]]
 
-printSetup :: GameSetup -> IO ()
-printSetup setup = do
-    putStrLn $ "--" ++ (surround "+" $ replicate 23 '-')
-    putStrLn $ stringifySetup setup 
-    putStrLn $ "--" ++ (surround "+" $ replicate 23 '-')
-    putStrLn "  |A |B |C |D |E |F |G |H |" 
+header :: [String]
+header = ["--" ++ (surround "+" $ replicate 23 '-')]
 
-onBoard :: Position -> Bool
-onBoard p 
-    | file p < 'a' || file p > 'h' = False
-    | rank p < 1 || rank p > 8 = False
-    | otherwise = True
+fileLegend :: [String]
+fileLegend = ["  |A |B |C |D |E |F |G |H |" ]
+
+prettyRank :: GameSetup -> Int -> [String]
+prettyRank setup r = [(show r) ++ " " ++ (fullIntercalate "|" $ cleanPiecesByRank setup r)]
+
+cleanPiecesByRank :: GameSetup -> Int -> [String]
+cleanPiecesByRank setup r = map showMaybe $ piecesByRank setup r
 
 
-clearPath :: Position -> Position -> GameSetup -> Bool
-clearPath p1 p2 setup
-    | p1 == p2 = False
-    | not (onBoard p1 || onBoard p2) = False
-    | otherwise = Nothing == Map.lookup p2 setup
-    where diff = difference p1 p2 
+
 
