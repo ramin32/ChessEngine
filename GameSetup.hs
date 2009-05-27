@@ -35,26 +35,28 @@ newGameSetup = GameSetup
 singleView :: GameSetup -> PartialSetup
 singleView setup = Map.union (whitePieces setup) (blackPieces setup)
 
+pieceAt p setup = Map.lookup p (singleView setup)
+
 piecesByRank :: GameSetup -> Int -> [Maybe ChessPiece]
-piecesByRank setup r = map (\p -> Map.lookup p (singleView setup)) (positionsByRank r)
+piecesByRank setup r = map (\p -> pieceAt p setup) (positionsByRank r)
 
 instance Show GameSetup where
     show setup = intercalate "\n" ((surround header (stringifySetup setup)) ++ fileLegend)
+        where
+            stringifySetup :: GameSetup -> [String]
+            stringifySetup setup = concat [prettyRank setup r | r <- [8, 7..1]]
 
-stringifySetup :: GameSetup -> [String]
-stringifySetup setup = concat [prettyRank setup r | r <- [8, 7..1]]
+            header :: [String]
+            header = ["--" ++ (surround "+" $ replicate 23 '-')]
 
-header :: [String]
-header = ["--" ++ (surround "+" $ replicate 23 '-')]
+            fileLegend :: [String]
+            fileLegend = ["  |A |B |C |D |E |F |G |H |" ]
 
-fileLegend :: [String]
-fileLegend = ["  |A |B |C |D |E |F |G |H |" ]
+            prettyRank :: GameSetup -> Int -> [String]
+            prettyRank setup r = [(show r) ++ " " ++ (fullIntercalate "|" $ cleanPiecesByRank setup r)]
 
-prettyRank :: GameSetup -> Int -> [String]
-prettyRank setup r = [(show r) ++ " " ++ (fullIntercalate "|" $ cleanPiecesByRank setup r)]
-
-cleanPiecesByRank :: GameSetup -> Int -> [String]
-cleanPiecesByRank setup r = map showMaybe $ piecesByRank setup r
+            cleanPiecesByRank :: GameSetup -> Int -> [String]
+            cleanPiecesByRank setup r = map showMaybe $ piecesByRank setup r
 
 
 

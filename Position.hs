@@ -5,11 +5,13 @@ import Data.Char
 data Position = Position {file :: Char, rank :: Int} 
                 deriving (Eq, Ord, Show)
 
+type Distance = (Int, Int)
+
 fileOrd :: Position -> Int
 fileOrd p = ord $ file p
 
-difference :: Position -> Position -> (Int, Int)
-difference p1 p2 = ((fileOrd p1) - (fileOrd p2), (rank p1) - (rank p2))
+distance :: Position -> Position -> Distance
+distance p1 p2 = ((fileOrd p1) - (fileOrd p2), (rank p1) - (rank p2))
 
 onBoard :: Position -> Bool
 onBoard p 
