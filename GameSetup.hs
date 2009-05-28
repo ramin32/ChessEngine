@@ -8,20 +8,15 @@ import ChessPiece
 import Position
 import StringUtil
 
-type PartialSetup = Map.Map Position ChessPiece
+type GameSetup = Map.Map Position ChessPiece
 
-data GameSetup = GameSetup { whitePieces :: PartialSetup,
-                             blackPieces :: PartialSetup } deriving (Eq, Ord)   
-
-
-
-pawnsSetup :: Color -> PartialSetup
+pawnsSetup :: Color -> GameSetup
 pawnsSetup color = Map.fromList $ 
                          zip (positionsByRank rank) (repeat $ ChessPiece Pawn color) 
                          where 
                             rank = if color == White then 2 else 7
 
-otherPiecesSetup :: Color -> PartialSetup
+otherPiecesSetup :: Color -> GameSetup
 otherPiecesSetup color = Map.fromList $
                          [(p, ChessPiece n c) | (p, n, c) <- zip3 (positionsByRank rank) pieces (repeat color)]
                          where 
@@ -29,21 +24,15 @@ otherPiecesSetup color = Map.fromList $
                             rank = if color == White then 1 else 8
             
 newGameSetup :: GameSetup
-newGameSetup = GameSetup 
+newGameSetup = Map.union 
                (Map.union (pawnsSetup White) (otherPiecesSetup White))
                (Map.union (pawnsSetup Black) (otherPiecesSetup Black))
 
-singleView :: GameSetup -> PartialSetup
-singleView setup = Map.union (whitePieces setup) (blackPieces setup)
-
-pieceAt :: Position -> GameSetup -> Maybe ChessPiece
-pieceAt p setup = Map.lookup p (singleView setup)
-
 piecesByRank :: GameSetup -> Int -> [Maybe ChessPiece]
-piecesByRank setup r = map (\p -> pieceAt p setup) (positionsByRank r)
+piecesByRank setup r = map (\p -> Map.lookup p setup) (positionsByRank r)
 
-instance Show GameSetup where
-    show setup = intercalate "\n" ((surround header (stringifySetup setup)) ++ fileLegend)
+showSetup :: GameSetup -> String
+showSetup setup = intercalate "\n" ((surround header (stringifySetup setup)) ++ fileLegend)
         where
             stringifySetup :: GameSetup -> [String]
             stringifySetup setup = concat [prettyRank setup r | r <- [8, 7..1]]
