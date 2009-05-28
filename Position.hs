@@ -11,7 +11,7 @@ fileOrd :: Position -> Int
 fileOrd p = ord $ file p
 
 distance :: Position -> Position -> Distance
-distance p1 p2 = ((fileOrd p1) - (fileOrd p2), (rank p1) - (rank p2))
+distance p1 p2 = ((fileOrd p2) - (fileOrd p1), (rank p2) - (rank p1))
 
 onBoard :: Position -> Bool
 onBoard p 

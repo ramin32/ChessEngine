@@ -2,6 +2,7 @@ module GameSetup where
 
 import qualified Data.Map as Map
 import Data.List
+import Data.Maybe
 
 import ChessPiece
 import Position
@@ -35,6 +36,7 @@ newGameSetup = GameSetup
 singleView :: GameSetup -> PartialSetup
 singleView setup = Map.union (whitePieces setup) (blackPieces setup)
 
+pieceAt :: Position -> GameSetup -> Maybe ChessPiece
 pieceAt p setup = Map.lookup p (singleView setup)
 
 piecesByRank :: GameSetup -> Int -> [Maybe ChessPiece]
