@@ -29,22 +29,6 @@ isValidMoveHelper (Just (ChessPiece Pawn Black)) Nothing (Position _ 7) (0, 2) =
 
 isValidMoveHelper _ _ _ _ = True
 
-isEl :: Distance -> Bool
-isEl d
-    | (abs $ fst d) == 1 && (abs $ snd d) == 3 = True
-    | (abs $ fst d) == 3 && (abs $ snd d) == 1 = True
-    | otherwise = False
-
-isDiagnal :: Distance -> Bool
-isDiagnal d = fst d == snd d
-
-isLinear :: Distance -> Bool
-isLinear (0, _) = True
-isLinear (_, 0) = True
-isLinear (_, _) = False
-
-isSingleMover :: Distance -> Bool
-isSingleMover d = (abs $ fst d) < 2 && (abs $ snd d) < 2
 
 executeMove :: Position -> Position -> GameSetup -> GameSetup
 executeMove p1 p2 setup 
