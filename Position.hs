@@ -26,7 +26,7 @@ allPositions :: [(Int, [Position])]
 allPositions = [(r, positionsByRank r) | r <- [1..8]]
 
 positions :: Position -> Distance -> [Position]
-positions _ (0, 0) = []
+positions p1 (0, 0) = p1 : []
 positions p1 d = p1 : positions (Position (chr (f + xInc)) (r + yInc)) (fstD - xInc, sndD - yInc) 
     where f = fileOrd p1
           r = rank p1
