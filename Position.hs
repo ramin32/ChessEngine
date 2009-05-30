@@ -20,13 +20,13 @@ onBoard p
     | otherwise = True
 
 positionsByRank :: Int -> [Position]
-positionsByRank rank = [Position f r | (f, r) <- zip ['a'..'h'] (repeat rank) ]
+positionsByRank r = [Position f r | f <- ['a'..'h']]
 
 allPositions :: [(Int, [Position])]
 allPositions = [(r, positionsByRank r) | r <- [1..8]]
 
 positions :: Position -> Distance -> [Position]
-positions p1 (0, 0) = []
+positions _ (0, 0) = []
 positions p1 d = p1 : positions (Position (chr (f + xInc)) (r + yInc)) (fstD - xInc, sndD - yInc) 
     where f = fileOrd p1
           r = rank p1
@@ -34,7 +34,6 @@ positions p1 d = p1 : positions (Position (chr (f + xInc)) (r + yInc)) (fstD - x
           sndD = snd d
           xInc = signum fstD
           yInc = signum sndD
-
 
 
 isEl :: Distance -> Bool
