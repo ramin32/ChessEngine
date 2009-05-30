@@ -29,6 +29,11 @@ isValidMoveHelper (Just (ChessPiece Pawn Black)) Nothing (Position _ 7) (0, 2) =
 
 isValidMoveHelper _ _ _ _ = True
 
+{-
+isPathClear :: Color -> [Position] -> GameSetup -> Bool
+isPathClear c ps setup = all (init)
+    | c == color ()  
+-}
 
 executeMove :: Position -> Position -> GameSetup -> GameSetup
 executeMove p1 p2 setup 

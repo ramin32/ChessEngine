@@ -35,6 +35,8 @@ positions p1 d = p1 : positions (Position (chr (f + xInc)) (r + yInc)) (fstD - x
           xInc = signum fstD
           yInc = signum sndD
 
+positionsFrom p d = tail $ positions p d
+
 
 isEl :: Distance -> Bool
 isEl d
