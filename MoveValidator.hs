@@ -1,6 +1,8 @@
 module MoveValidator where
 
 import qualified Data.Map as Map
+import Data.Maybe
+
 
 import Position
 import ChessPiece
@@ -29,14 +31,14 @@ isValidMoveHelper (Just (ChessPiece Pawn Black)) Nothing (Position _ 7) (0, 2) =
 
 isValidMoveHelper _ _ _ _ = True
 
-{-
-isPathClear :: Color -> [Position] -> GameSetup -> Bool
-isPathClear c ps setup = all (init)
-    | c == color ()  
--}
+isPathClear :: [Position] -> GameSetup -> Bool
+isPathClear ps setup = and mappedToNothing
+    where innerPositions = (init . tail) ps
+          lookedUpPositions = map (`Map.lookup` setup) innerPositions
+          mappedToNothing = map (== Nothing) lookedUpPositions 
 
 executeMove :: Position -> Position -> GameSetup -> GameSetup
 executeMove p1 p2 setup 
-    | isValidMove p1 p2 setup = Map.delete p1 setup
+    | isValidMove p1 p2 setup = Map.insert p2 (fromJust $ Map.lookup p1 setup) (Map.delete p1 setup)
     | otherwise = setup
 
