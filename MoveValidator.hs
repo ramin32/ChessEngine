@@ -21,6 +21,7 @@ isValidMoveHelper Nothing _ _ _ = False
 
 -- Capture same color
 isValidMoveHelper (Just (ChessPiece _ White)) (Just (ChessPiece _ White)) _ _ = False
+isValidMoveHelper (Just (ChessPiece _ Black)) (Just (ChessPiece _ Black)) _ _ = False
 
 -- Pawn validation
 isValidMoveHelper (Just (ChessPiece Pawn White)) Nothing (Position _ 2) (0, 1) = True
@@ -28,8 +29,6 @@ isValidMoveHelper (Just (ChessPiece Pawn White)) Nothing (Position _ 2) (0, 2) =
 
 isValidMoveHelper (Just (ChessPiece Pawn Black)) Nothing (Position _ 7) (0, 1) = True
 isValidMoveHelper (Just (ChessPiece Pawn Black)) Nothing (Position _ 7) (0, 2) = True
-
-isValidMoveHelper _ _ _ _ = True
 
 isPathClear :: [Position] -> GameSetup -> Bool
 isPathClear ps setup = and mappedToNothing
