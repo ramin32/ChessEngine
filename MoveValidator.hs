@@ -10,6 +10,7 @@ import GameSetup
 
 isValidMove :: Position -> Position -> GameSetup -> Bool
 isValidMove p1 p2 setup 
+    | cp1DoesntExists = False
     | not (onBoard p1 || onBoard p2) = False
     | oponentMatchingColors = False
     | cp1IsNotKnight && not (isPathClear p1 d setup)= False
@@ -18,15 +19,11 @@ isValidMove p1 p2 setup
               cp2 = Map.lookup p2 setup
               d = distance p1 p2
               oponentMatchingColors = (fmap color cp1) == (fmap color cp2)
+              cp1DoesntExists = cp1 == Nothing
               cp1IsNotKnight = (fmap name cp1) /= Just Knight
               
 
 isValidMoveHelper :: Maybe ChessPiece -> Maybe ChessPiece -> Position -> Distance -> Bool
-isValidMoveHelper Nothing _ _ _ = False
-
--- Capture same color
-isValidMoveHelper (Just (ChessPiece _ White)) (Just (ChessPiece _ White)) _ _ = False
-isValidMoveHelper (Just (ChessPiece _ Black)) (Just (ChessPiece _ Black)) _ _ = False
 
 -- Pawn validation
 isValidMoveHelper (Just (ChessPiece Pawn White)) Nothing (Position _ 2) (0, 1) = True
@@ -34,6 +31,15 @@ isValidMoveHelper (Just (ChessPiece Pawn White)) Nothing (Position _ 2) (0, 2) =
 
 isValidMoveHelper (Just (ChessPiece Pawn Black)) Nothing (Position _ 7) (0, (-1)) = True
 isValidMoveHelper (Just (ChessPiece Pawn Black)) Nothing (Position _ 7) (0, (-2)) = True
+
+isValidMoveHelper (Just (ChessPiece pieceName _)) _ _ d = case pieceName of
+    Rook -> isLinear d
+    Knight -> isEl d
+    Bishop -> isDiagnal d
+    Queen -> isLinearXorDiagnal d
+    King -> isLinearXorDiagnal d 
+    _ -> False
+    
 
 isValidMoveHelper _ _ _ _ = False
 

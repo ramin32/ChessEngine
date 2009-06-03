@@ -47,7 +47,9 @@ isDiagnal d = fst d == snd d
 isLinear :: Distance -> Bool
 isLinear (0, _) = True
 isLinear (_, 0) = True
-isLinear (_, _) = False
+isLinear _ = False
+
+isLinearXorDiagnal d = isLinear d || isDiagnal d 
 
 isSingleMover :: Distance -> Bool
 isSingleMover d = (abs $ fst d) < 2 && (abs $ snd d) < 2
