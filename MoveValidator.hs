@@ -37,7 +37,7 @@ isPathClear ps setup = and mappedToNothing
           mappedToNothing = map (== Nothing) lookedUpPositions 
 
 executeMove :: Position -> Position -> GameSetup -> GameSetup
-executeMove p1 p2 setup 
-    | isValidMove p1 p2 setup = Map.insert p2 (fromJust $ Map.lookup p1 setup) (Map.delete p1 setup)
-    | otherwise = setup
+executeMove p1 p2 setup  = Map.insert p2 (fromJust $ Map.lookup p1 setup) (Map.delete p1 setup)
+    -- | isValidMove p1 p2 setup =
+    -- | otherwise = setup
 
