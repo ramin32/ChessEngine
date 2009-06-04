@@ -25,14 +25,9 @@ runGame setup White = do
     runGame newSetup newTurn
 
 runGame setup Black = do
-    putStrLn $ showSetup setup
-    print "Enter your move (a2 a3)"
     let (pos1, pos2) = calculateMove Black setup
     let (newSetup, newTurn, newMsg) =  executeMove Black pos1 pos2 setup
     runGame newSetup newTurn
-
-
-
     
 executeMove :: Color -> Position -> Position -> GameSetup -> (GameSetup, Color, String)
 executeMove turn p1 p2 setup  
