@@ -37,8 +37,8 @@ positions p1 d = p1 : positions (Position (chr (f + xInc)) (r + yInc)) (fstD - x
 
 isEl :: Distance -> Bool
 isEl d
-    | (abs $ fst d) == 1 && (abs $ snd d) == 3 = True
-    | (abs $ fst d) == 3 && (abs $ snd d) == 1 = True
+    | (abs $ fst d) == 1 && (abs $ snd d) == 2 = True
+    | (abs $ fst d) == 2 && (abs $ snd d) == 1 = True
     | otherwise = False
 
 isDiagnal :: Distance -> Bool
@@ -49,6 +49,7 @@ isLinear (0, _) = True
 isLinear (_, 0) = True
 isLinear _ = False
 
+isLinearXorDiagnal :: Distance -> Bool
 isLinearXorDiagnal d = isLinear d || isDiagnal d 
 
 isSingleMover :: Distance -> Bool

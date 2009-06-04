@@ -2,15 +2,16 @@ module MoveValidator where
 
 import qualified Data.Map as Map
 import Data.Maybe
-
+import Control.Applicative
 
 import Position
 import ChessPiece
 import GameSetup
 
-isValidMove :: Position -> Position -> GameSetup -> Bool
-isValidMove p1 p2 setup 
+isValidMove :: Color -> Position -> Position -> GameSetup -> Bool
+isValidMove turn p1 p2 setup 
     | cp1DoesntExists = False
+    | (fmap color cp1) /= pure turn = False 
     | not (onBoard p1 || onBoard p2) = False
     | oponentMatchingColors = False
     | cp1IsNotKnight && not (isPathClear p1 d setup)= False
@@ -50,8 +51,8 @@ isPathClear p1 d setup = and innerMappedToNothing
           innerMappedToNothing = map (== Nothing) lookedUpPositions 
           ps = positions p1 d
 
-executeMove :: Position -> Position -> GameSetup -> GameSetup
-executeMove p1 p2 setup  
-    | isValidMove p1 p2 setup = Map.insert p2 (fromJust $ Map.lookup p1 setup) (Map.delete p1 setup)
+executeMove :: Color -> Position -> Position -> GameSetup -> GameSetup
+executeMove turn p1 p2 setup  
+    | isValidMove turn p1 p2 setup = Map.insert p2 (fromJust $ Map.lookup p1 setup) (Map.delete p1 setup)
     | otherwise = setup
 
