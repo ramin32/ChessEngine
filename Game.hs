@@ -17,6 +17,8 @@ runGame setup turn = do
     let p2 = (tail . dropWhile (/= ' ')) move
     let pos1 = Position (p1 !! 0) (digitToInt $ p1 !! 1)
     let pos2 = Position (p2 !! 0) (digitToInt $ p2 !! 1)
-    runGame (executeMove turn pos1 pos2 setup) (toggleColor turn)
+    let (newSetup, newTurn, newMsg) =  executeMove turn pos1 pos2 setup
+    putStrLn newMsg
+    runGame newSetup newTurn
     
 
