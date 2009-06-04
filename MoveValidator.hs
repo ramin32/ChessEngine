@@ -8,6 +8,7 @@ import Position
 import ChessPiece
 import GameSetup
 
+
 isValidMove :: Color -> Position -> Position -> GameSetup -> (Bool, String)
 isValidMove turn p1 p2 setup 
     | cp1DoesntExists = (False, "No piece at initial location!")
@@ -51,9 +52,4 @@ isPathClear p1 d setup = and innerMappedToNothing
           innerMappedToNothing = map (== Nothing) lookedUpPositions 
           ps = positions p1 d
 
-executeMove :: Color -> Position -> Position -> GameSetup -> (GameSetup, Color, String)
-executeMove turn p1 p2 setup  
-    | valid = (Map.insert p2 (fromJust $ Map.lookup p1 setup) (Map.delete p1 setup), toggleColor turn, msg)
-    | otherwise = (setup, turn, msg)
-        where (valid, msg) = isValidMove turn p1 p2 setup 
 

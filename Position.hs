@@ -22,8 +22,8 @@ onBoard p
 positionsByRank :: Int -> [Position]
 positionsByRank r = [Position f r | f <- ['a'..'h']]
 
-allPositions :: [(Int, [Position])]
-allPositions = [(r, positionsByRank r) | r <- [1..8]]
+allPositions :: [Position]
+allPositions = concat [positionsByRank r | r <- [1..8]]
 
 positions :: Position -> Distance -> [Position]
 positions p1 (0, 0) = p1 : []
