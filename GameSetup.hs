@@ -67,5 +67,6 @@ evaluateSetup setup = total $
                       (SetupEvaluation 0 0) 
                       setup
 
+
 unsafeExecuteMove :: Move -> GameSetup -> GameSetup
 unsafeExecuteMove m setup = Map.insert (to m) (fromJust $ Map.lookup (from m) setup) (Map.delete (from m) setup)
