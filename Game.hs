@@ -14,6 +14,8 @@ import OponentAi
 runGame :: GameSetup -> Color -> IO ()
 runGame setup White = do
     putStrLn $ showSetup setup
+    let scoreString =  "Current Score: " ++ (show $ evaluateSetup setup)
+    print scoreString
     print "Enter your move (a2 a3)"
     move <- getLine
     let p1 = takeWhile (/= ' ') move

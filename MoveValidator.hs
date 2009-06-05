@@ -33,8 +33,11 @@ isValidMoveHelper :: Maybe ChessPiece -> Maybe ChessPiece -> Position -> Distanc
 isValidMoveHelper (Just (ChessPiece Pawn White)) _ _ (0, 1) = (True, "Good Move!")
 isValidMoveHelper (Just (ChessPiece Pawn White)) _ (Position _ 2) (0, 2) = (True, "Good Move!")
 
+isValidMoveHelper (Just (ChessPiece Pawn  White)) (Just (ChessPiece _ Black)) _ (f, 1) = (abs f == 1, "Good Move!")
+
 isValidMoveHelper (Just (ChessPiece Pawn Black)) _ _ (0, (-1)) = (True, "Good Move!")
 isValidMoveHelper (Just (ChessPiece Pawn Black)) _ (Position _ 7) (0, (-2)) = (True, "Good Move!")
+isValidMoveHelper (Just (ChessPiece Pawn Black)) (Just (ChessPiece _ White)) _ (f, (-1)) = (abs f == 1, "Good Move!")
 
 isValidMoveHelper (Just (ChessPiece pieceName _)) _ _ d = case pieceName of
     Rook -> (isLinear d, "")

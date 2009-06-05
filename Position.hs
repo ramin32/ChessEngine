@@ -42,7 +42,7 @@ isEl d
     | otherwise = False
 
 isDiagnal :: Distance -> Bool
-isDiagnal d = fst d == snd d
+isDiagnal d = (abs $ fst d) == (abs $ snd d)
 
 isLinear :: Distance -> Bool
 isLinear (0, _) = True
