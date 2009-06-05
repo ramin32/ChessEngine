@@ -9,15 +9,17 @@ import ChessPiece
 import GameSetup
 
 
-isValidMove :: Color -> Position -> Position -> GameSetup -> (Bool, String)
-isValidMove turn p1 p2 setup 
+isValidMove :: Color -> Move -> GameSetup -> (Bool, String)
+isValidMove turn m setup 
     | cp1DoesntExists = (False, "No piece at initial location!")
     | (fmap color cp1) /= Just turn = (False, "Wrong turn!") 
     | not (onBoard p1 || onBoard p2) = (False, "Move out of bounds!")
     | oponentMatchingColors = (False, "You're the opponent!")  
     | cp1IsNotKnight && not (isPathClear p1 d setup) = (False, "Path not clear")
     | otherwise = isValidMoveHelper cp1 cp2 p1 d
-        where cp1 = Map.lookup p1 setup
+        where p1 = from m
+              p2 = to m
+              cp1 = Map.lookup p1 setup
               cp2 = Map.lookup p2 setup
               d = distance p1 p2
               oponentMatchingColors = (fmap color cp1) == (fmap color cp2)

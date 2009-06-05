@@ -9,6 +9,7 @@ import Position
 import StringUtil
 
 type GameSetup = Map.Map Position ChessPiece
+data Move = Move {from :: Position, to :: Position}
 
 pawnsSetup :: Color -> GameSetup
 pawnsSetup color = Map.fromList $ 
@@ -50,5 +51,21 @@ showSetup setup = intercalate "\n" ((surround header (stringifySetup setup)) ++ 
             cleanPiecesByRank setup r = map showMaybe $ piecesByRank setup r
 
 
+data SetupEvaluation = SetupEvaluation {white :: Int, black :: Int} deriving (Show, Eq, Ord)
 
+incrementEvaluation :: SetupEvaluation -> Color -> Int -> SetupEvaluation
+incrementEvaluation (SetupEvaluation w b) White wInc = SetupEvaluation (w + wInc) (b)
+incrementEvaluation (SetupEvaluation w b) Black bInc = SetupEvaluation w (b - bInc)
 
+total :: SetupEvaluation -> Int
+total eval = white eval + black eval
+
+evaluateSetup :: GameSetup -> Int
+evaluateSetup setup = total $
+                      Map.fold 
+                      (\piece eval -> incrementEvaluation eval (color piece) (value piece) ) 
+                      (SetupEvaluation 0 0) 
+                      setup
+
+unsafeExecuteMove :: Move -> GameSetup -> GameSetup
+unsafeExecuteMove m setup = Map.insert (to m) (fromJust $ Map.lookup (from m) setup) (Map.delete (from m) setup)

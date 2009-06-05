@@ -8,7 +8,7 @@ import GameSetup
 import Position
 import MoveValidator
 import ChessPiece
-import PositionIterator
+import OponentAi
 
 
 runGame :: GameSetup -> Color -> IO ()
@@ -20,18 +20,17 @@ runGame setup White = do
     let p2 = (tail . dropWhile (/= ' ')) move
     let pos1 = Position (p1 !! 0) (digitToInt $ p1 !! 1)
     let pos2 = Position (p2 !! 0) (digitToInt $ p2 !! 1)
-    let (newSetup, newTurn, newMsg) =  executeMove White pos1 pos2 setup
+    let (newSetup, newTurn, newMsg) =  executeMove White (Move pos1 pos2) setup
     putStrLn newMsg
     runGame newSetup newTurn
 
 runGame setup Black = do
-    let (pos1, pos2) = calculateMove Black setup
-    let (newSetup, newTurn, newMsg) =  executeMove Black pos1 pos2 setup
-    runGame newSetup newTurn
+    let m = calculateMove Black setup
+    let newSetup = unsafeExecuteMove m setup
+    runGame newSetup White
     
-executeMove :: Color -> Position -> Position -> GameSetup -> (GameSetup, Color, String)
-executeMove turn p1 p2 setup  
-    | valid = (Map.insert p2 (fromJust $ Map.lookup p1 setup) (Map.delete p1 setup), toggleColor turn, msg)
+executeMove :: Color -> Move -> GameSetup -> (GameSetup, Color, String)
+executeMove turn m setup  
+    | valid = (unsafeExecuteMove m setup, toggleColor turn, msg)
     | otherwise = (setup, turn, msg)
-        where (valid, msg) = isValidMove turn p1 p2 setup 
-
+        where (valid, msg) = isValidMove turn m  setup 
