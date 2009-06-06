@@ -1,0 +1,13 @@
+######################
+### ChessEngine.hs ###
+######################
+
+A chess playing program written entirely in the haskell programming language.
+Uses material values and mobility as factors in evaluating possible moves.
+
+Licensed by GPLv3
+
+Author:
+Ramin Rakhamimov
+ramin32@gmail.com
+http://raminrakhamimov.tk

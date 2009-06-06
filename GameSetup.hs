@@ -1,3 +1,15 @@
+----------------------------------------------------------
+-- GameSetup.hs
+--
+-- Types to maintain current game formation.
+-- 
+-- Author: 
+-- Ramin Rakhamimov
+-- http://raminrakhamimov.tk
+-- ramin32@gmail.com
+---------------------------------------------------------
+
+
 module GameSetup where
 
 import qualified Data.Map as Map

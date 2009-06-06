@@ -1,3 +1,15 @@
+----------------------------------------------------------
+-- OponentAi.hs
+--
+-- Various functions for calculating CPU-player moves.
+--
+-- Author: 
+-- Ramin Rakhamimov
+-- http://raminrakhamimov.tk
+-- ramin32@gmail.com
+---------------------------------------------------------
+
+
 module OponentAi where
 
 import qualified Data.Map as Map

@@ -1,3 +1,14 @@
+----------------------------------------------------------
+-- ChessPiece.hs
+--
+-- ChessPiece related types
+--
+-- Author: 
+-- Ramin Rakhamimov
+-- http://raminrakhamimov.tk
+-- ramin32@gmail.com
+---------------------------------------------------------
+
 module ChessPiece where
 
 data PieceName = Pawn | Knight | Bishop | Rook | Queen | King deriving (Eq, Ord, Show, Enum) 

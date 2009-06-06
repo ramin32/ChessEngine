@@ -1,3 +1,14 @@
+------------------------------------------------------------
+-- Position.hs
+--
+-- Types/functions for maintaining positions in a GameSetup
+--
+-- Author: 
+-- Ramin Rakhamimov
+-- http://raminrakhamimov.tk
+-- ramin32@gmail.com
+-----------------------------------------------------------
+
 module Position where
 
 import Data.Char

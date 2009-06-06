@@ -1,3 +1,15 @@
+----------------------------------------------------------
+-- StringUtil.hs
+--
+-- Some simple string utility functions.
+--
+-- Author: 
+-- Ramin Rakhamimov
+-- http://raminrakhamimov.tk
+-- ramin32@gmail.com
+---------------------------------------------------------
+
+
 module StringUtil where
 
 import Data.List

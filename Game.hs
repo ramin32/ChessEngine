@@ -1,3 +1,14 @@
+----------------------------------------------------------
+-- Game.hs
+--
+-- Runs a game session alternating between user and CPU.
+--
+-- Author: 
+-- Ramin Rakhamimov
+-- http://raminrakhamimov.tk
+-- ramin32@gmail.com
+---------------------------------------------------------
+
 module Game where
 
 import Data.Char

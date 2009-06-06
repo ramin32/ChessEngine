@@ -1,3 +1,16 @@
+----------------------------------------------------------
+-- MoveValidator.hs
+--
+-- Contains various functions to validate valid moves
+-- given certain GameSetup's.
+-- 
+-- Author: 
+-- Ramin Rakhamimov
+-- http://raminrakhamimov.tk
+-- ramin32@gmail.com
+---------------------------------------------------------
+
+
 module MoveValidator where
 
 import qualified Data.Map as Map
