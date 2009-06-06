@@ -21,8 +21,8 @@ import ChessPiece
 import MoveValidator
 import GameSetup
 
-calculateMove :: Color -> GameSetup -> Move
-calculateMove c setup = fst $ minimumBy (comparing snd) $ moveScores possibleCMoves setup
+calculateMove :: Color -> GameSetup -> (Move, Int)
+calculateMove c setup = minimumBy (comparing snd) $ moveScores possibleCMoves setup
     where possibleCMoves = allValidMoves c setup
           possibleToggledCMoves = allValidMoves (toggleColor c) setup
 
