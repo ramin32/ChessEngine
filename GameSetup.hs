@@ -21,7 +21,6 @@ import Position
 import StringUtil
 
 type GameSetup = Map.Map Position ChessPiece
-data Move = Move {from :: Position, to :: Position}
 
 pawnsSetup :: Color -> GameSetup
 pawnsSetup color = Map.fromList $ 
@@ -82,3 +81,13 @@ evaluateSetup setup = total $
 
 unsafeExecuteMove :: Move -> GameSetup -> GameSetup
 unsafeExecuteMove m setup = Map.insert (to m) (fromJust $ Map.lookup (from m) setup) (Map.delete (from m) setup)
+
+allOccupiedPositions :: GameSetup -> [Position]
+allOccupiedPositions setup = Map.keys setup
+
+piecePosition :: ChessPiece -> GameSetup -> Maybe Position
+piecePosition cp setup 
+    | null matches = Nothing
+    | otherwise = Just (fst $ head matches)
+        where list = Map.toList setup          
+              matches = filter (\(_, v) -> cp == v) list

@@ -24,6 +24,10 @@ import GameSetup
 
 isValidMove :: Color -> Move -> GameSetup -> (Bool, String)
 isValidMove turn m setup 
+    | isCheckMated turn setup = (False, "CheckMate!")
+    | isChecked turn setup = case (elem m $ allCheckSaves turn setup) of
+                             True -> (True, "Good Move")
+                             False -> (False, "Still checked!")
     | cp1DoesntExists = (False, "No piece at initial location!")
     | samePosition = (False, "Same position!")
     | (fmap color cp1) /= Just turn = (False, "Wrong turn!") 
@@ -44,6 +48,9 @@ isValidMove turn m setup
 
 isValidMoveHelper :: Maybe ChessPiece -> Maybe ChessPiece -> Position -> Distance -> (Bool, String)
 
+-- Don't take king.
+isValidMoveHelper _ (Just (ChessPiece King _)) _ _ = (False, "King cannot be taken!")
+
 -- Pawn validation
 isValidMoveHelper (Just (ChessPiece Pawn White)) _ _ (0, 1) = (True, "Good Move!")
 isValidMoveHelper (Just (ChessPiece Pawn White)) _ (Position _ 2) (0, 2) = (True, "Good Move!")
@@ -58,7 +65,7 @@ isValidMoveHelper (Just (ChessPiece pieceName _)) _ _ d = case pieceName of
     Knight -> (isEl d, "")
     Bishop -> (isDiagnal d, "")
     Queen -> (isLinearXorDiagnal d, "")
-    King -> (isLinearXorDiagnal d, "") 
+    King -> (isLinearXorDiagnal d && isSingleMover d, "") 
     _ ->  (False, "Invalid Move")
     
 
@@ -71,4 +78,17 @@ isPathClear p1 d setup = and innerMappedToNothing
           innerMappedToNothing = map (== Nothing) lookedUpPositions 
           ps = positions p1 d
 
+isChecked :: Color -> GameSetup -> Bool
+isChecked c setup = check
+    where kingPosition = fromJust $ piecePosition (ChessPiece King c) setup -- Kings always on board!
+          allOponentMoves = allValidMoves (toggleColor c) setup
+          check = not $ null (filter (\m -> (to m) == kingPosition) allOponentMoves)
+          
+isCheckMated :: Color -> GameSetup -> Bool
+isCheckMated c setup = null $ allCheckSaves c setup
 
+allCheckSaves :: Color -> GameSetup -> [Move]
+allCheckSaves c setup = filter (\m -> isChecked c (unsafeExecuteMove m setup)) $ allValidMoves c setup
+
+allValidMoves :: Color -> GameSetup -> [Move]
+allValidMoves c setup = [Move p1 p2 | p1 <- allOccupiedPositions setup, p2 <- allPositions, fst $ isValidMove c (Move p1 p2) setup]

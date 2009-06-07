@@ -18,6 +18,7 @@ data Position = Position {file :: Char, rank :: Int}
 
 type Distance = (Int, Int)
 
+data Move = Move {from :: Position, to :: Position} deriving (Eq)
 fileOrd :: Position -> Int
 fileOrd p = ord $ file p
 
