@@ -24,10 +24,10 @@ import GameSetup
 
 isValidMove :: Color -> Move -> GameSetup -> (Bool, String)
 isValidMove turn m setup 
-    | isCheckMated turn setup = (False, "CheckMate!")
-    | isChecked turn setup = case (elem m $ allCheckSaves turn setup) of
-                             True -> (True, "Good Move")
-                             False -> (False, "Still checked!")
+    -- | isCheckMated turn setup = (False, "CheckMate!")
+    -- | isChecked turn setup = case (elem m $ allCheckSaves turn setup) of
+       --                      True -> (True, "Good Move")
+         --                    False -> (False, "Still checked!")
     | cp1DoesntExists = (False, "No piece at initial location!")
     | samePosition = (False, "Same position!")
     | (fmap color cp1) /= Just turn = (False, "Wrong turn!") 
