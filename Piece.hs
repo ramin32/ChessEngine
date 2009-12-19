@@ -1,19 +1,18 @@
-module MoveIterator where
+module Piece where
 import Data.Char
 import Data.List
 
-data Kind = Pawn | Knight | Bishop | Rook | Queen | King deriving (Eq, Show)
+
+data Piece = Pawn | Knight | Bishop | Rook | Queen | King deriving (Eq, Show)
 data Color = White | Black deriving (Show)
-data Piece = Piece Kind Color
 type Position = (Char, Int)
 type Move = (Int, Int)
 
 rank :: Position -> Int
 rank (_, rank) = rank
 
---assume pawn is always white, do conversion elsewhere
-iterateMoves :: Piece -> Position -> [Position]
-iterateMoves (Piece kind color) position = case kind of
+iterateMoves :: Piece -> Color -> Position -> [Position]
+iterateMoves piece color position = case piece of
     Pawn -> let pawnIncrements = case color of
                     White | (rank position) == 2 -> [(0, 1), (0, 2)]
                           | otherwise -> [(0, 1)]
@@ -46,13 +45,10 @@ allIncrements = horizontalIncrements ++ verticalIncrements ++ diagnalIncrements
 add :: Position -> Move -> Position
 add (file, rank) (fm, rm) = (chr ((ord file) + fm), rank + rm)
 
+
 -- between operator
 (>=<) :: (Ord a) => a -> (a,a) -> Bool
 n >=< (l, u) = n >= l && n <= u
 
 onBoard :: Position -> Bool
-onBoard (file, rank) = file >=< ('a','h') && rank >=< (1,8)
-
-
-
-
+onBoard (file, rank) = file >=< ('A','H') && rank >=< (1,8)
