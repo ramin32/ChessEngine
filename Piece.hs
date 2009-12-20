@@ -1,15 +1,13 @@
 module Piece where
 import Data.Char
 import Data.List
+import Position
 
 
 data Piece = Pawn | Knight | Bishop | Rook | Queen | King deriving (Eq, Show)
 data Color = White | Black deriving (Show)
-type Position = (Char, Int)
 type Move = (Int, Int)
 
-rank :: Position -> Int
-rank (_, rank) = rank
 
 iterateMoves :: Piece -> Color -> Position -> [Position]
 iterateMoves piece color position = case piece of
@@ -46,9 +44,3 @@ add :: Position -> Move -> Position
 add (file, rank) (fm, rm) = (chr ((ord file) + fm), rank + rm)
 
 
--- between operator
-(>=<) :: (Ord a) => a -> (a,a) -> Bool
-n >=< (l, u) = n >= l && n <= u
-
-onBoard :: Position -> Bool
-onBoard (file, rank) = file >=< ('A','H') && rank >=< (1,8)

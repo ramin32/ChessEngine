@@ -1,6 +1,7 @@
 module Board where
 
 import Piece
+import Position
 
 type OccupiedSquare = (Position, Piece)
 data Board = Board { whiteSquares :: [OccupiedSquare]
